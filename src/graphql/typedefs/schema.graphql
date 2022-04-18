@@ -1,0 +1,76 @@
+scalar Date
+
+type user {
+  id: ID!
+  username: String!
+  email: String!
+  password: String!
+  birthday: Date!
+  image: String!
+  subscription: Boolean!
+  sub_end: Date
+  createdAt: Date!
+  updatedAt: Date!
+  reviews: [review]
+}
+type review {
+  id: ID!
+  user: user!
+  book: book!
+  content: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+type book {
+  id: ID!
+  title: String!
+  author: String!
+  description: String!
+  image: String!
+  audio_link: String!
+  book_link: String!
+  category: [category]!
+  star: Int!
+  review: [review]
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type category {
+  id: ID!
+  name: String!
+  image: String!
+  createdAt: Date!
+  updatedAt: Date!
+}
+
+type Query {
+  user(id: ID!): user
+  users: [user]
+  deleteUser(id: ID!): user
+  book(id: ID!): book
+  books: [book]
+  category(id: ID!): category
+  categories: [category]
+  review(id: ID!): review
+  reviews: [review]
+}
+input userInput {
+  username: String!
+  email: String!
+  password: String!
+  birthday: Date!
+}
+input bookInput {
+  id: ID!
+  title: String!
+  author: String!
+  description: String!
+  image: String!
+  audio_link: String!
+  book_link: String!
+}
+type Mutation {
+  createUser(userInput: userInput): user
+  createBook(bookInput: bookInput): book
+}
