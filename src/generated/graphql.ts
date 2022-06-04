@@ -15,20 +15,91 @@ export type Scalars = {
   Date: any;
 };
 
+export type File = {
+  __typename?: 'File';
+  encoding: Scalars['String'];
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  active?: Maybe<Scalars['Boolean']>;
+  checkCode?: Maybe<Scalars['Boolean']>;
   createBook?: Maybe<Book>;
+  createCategory?: Maybe<Category>;
+  createReview?: Maybe<Review>;
   createUser?: Maybe<User>;
+  interest?: Maybe<Scalars['Boolean']>;
+  login?: Maybe<Scalars['String']>;
+  myBooks?: Maybe<Array<Maybe<Book>>>;
+  register?: Maybe<Scalars['String']>;
+  resetPassword?: Maybe<Scalars['Boolean']>;
+  searchBook?: Maybe<Array<Maybe<Book>>>;
+};
+
+
+export type MutationActiveArgs = {
+  input?: InputMaybe<Active>;
+};
+
+
+export type MutationCheckCodeArgs = {
+  input?: InputMaybe<CheckCode>;
 };
 
 
 export type MutationCreateBookArgs = {
-  bookInput?: InputMaybe<BookInput>;
+  input?: InputMaybe<BookInput>;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  image: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
+export type MutationCreateReviewArgs = {
+  bookId: Scalars['ID'];
+  content: Scalars['String'];
+  userID: Scalars['String'];
 };
 
 
 export type MutationCreateUserArgs = {
-  userInput?: InputMaybe<UserInput>;
+  input?: InputMaybe<UserInput>;
+};
+
+
+export type MutationInterestArgs = {
+  input?: InputMaybe<InterestCategory>;
+};
+
+
+export type MutationLoginArgs = {
+  input: Login;
+};
+
+
+export type MutationMyBooksArgs = {
+  input?: InputMaybe<Book_Id>;
+};
+
+
+export type MutationRegisterArgs = {
+  input: Register;
+};
+
+
+export type MutationResetPasswordArgs = {
+  input?: InputMaybe<ResetPassword>;
+};
+
+
+export type MutationSearchBookArgs = {
+  author?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -38,6 +109,7 @@ export type Query = {
   categories?: Maybe<Array<Maybe<Category>>>;
   category?: Maybe<Category>;
   deleteUser?: Maybe<User>;
+  home?: Maybe<Home>;
   review?: Maybe<Review>;
   reviews?: Maybe<Array<Maybe<Review>>>;
   user?: Maybe<User>;
@@ -69,71 +141,120 @@ export type QueryUserArgs = {
   id: Scalars['ID'];
 };
 
+export type Active = {
+  code?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+};
+
 export type Book = {
   __typename?: 'book';
-  audio_link: Scalars['String'];
-  author: Scalars['String'];
-  book_link: Scalars['String'];
-  category: Array<Maybe<Category>>;
-  createdAt: Scalars['Date'];
-  description: Scalars['String'];
-  id: Scalars['ID'];
-  image: Scalars['String'];
+  audio_link?: Maybe<Scalars['String']>;
+  author?: Maybe<Scalars['String']>;
+  book_link?: Maybe<Scalars['String']>;
+  category?: Maybe<Array<Maybe<Category>>>;
+  createdAt?: Maybe<Scalars['Date']>;
+  description?: Maybe<Scalars['String']>;
+  downloads?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['ID']>;
+  image?: Maybe<Scalars['String']>;
+  page?: Maybe<Scalars['Int']>;
   review?: Maybe<Array<Maybe<Review>>>;
-  star: Scalars['Int'];
-  title: Scalars['String'];
-  updatedAt: Scalars['Date'];
+  star?: Maybe<Scalars['Int']>;
+  title?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['Date']>;
 };
 
 export type BookInput = {
-  audio_link: Scalars['String'];
-  author: Scalars['String'];
-  book_link: Scalars['String'];
-  description: Scalars['String'];
-  id: Scalars['ID'];
-  image: Scalars['String'];
-  title: Scalars['String'];
+  audio_link?: InputMaybe<Scalars['String']>;
+  author?: InputMaybe<Scalars['String']>;
+  book_link?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  image?: InputMaybe<Scalars['String']>;
+  page?: InputMaybe<Scalars['Int']>;
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type Book_Id = {
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type Category = {
   __typename?: 'category';
-  createdAt: Scalars['Date'];
-  id: Scalars['ID'];
-  image: Scalars['String'];
-  name: Scalars['String'];
-  updatedAt: Scalars['Date'];
+  createdAt?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  image?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+};
+
+export type CheckCode = {
+  code?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+};
+
+export type Home = {
+  __typename?: 'home';
+  bestseller?: Maybe<Array<Maybe<Book>>>;
+  new_release?: Maybe<Array<Maybe<Book>>>;
+  recommended?: Maybe<Array<Maybe<Book>>>;
+  trend?: Maybe<Array<Maybe<Book>>>;
+};
+
+export type InterestCategory = {
+  id?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type Login = {
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+};
+
+export type Register = {
+  date?: InputMaybe<Scalars['Date']>;
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+};
+
+export type ResetPassword = {
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 export type Review = {
   __typename?: 'review';
-  book: Book;
-  content: Scalars['String'];
+  book?: Maybe<Book>;
+  content?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
   updatedAt: Scalars['Date'];
-  user: User;
+  user?: Maybe<User>;
 };
 
 export type User = {
   __typename?: 'user';
-  birthday: Scalars['Date'];
-  createdAt: Scalars['Date'];
-  email: Scalars['String'];
-  id: Scalars['ID'];
-  image: Scalars['String'];
-  password: Scalars['String'];
+  active?: Maybe<Scalars['Boolean']>;
+  birthday?: Maybe<Scalars['Date']>;
+  code?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Date']>;
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  image?: Maybe<Scalars['String']>;
+  interest?: Maybe<Array<Maybe<Category>>>;
+  mybooks?: Maybe<Array<Maybe<Book>>>;
+  password?: Maybe<Scalars['String']>;
   reviews?: Maybe<Array<Maybe<Review>>>;
   sub_end?: Maybe<Scalars['Date']>;
-  subscription: Scalars['Boolean'];
-  updatedAt: Scalars['Date'];
-  username: Scalars['String'];
+  subscription?: Maybe<Scalars['Boolean']>;
+  updatedAt?: Maybe<Scalars['Date']>;
+  username?: Maybe<Scalars['String']>;
 };
 
 export type UserInput = {
-  birthday: Scalars['Date'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-  username: Scalars['String'];
+  birthday?: InputMaybe<Scalars['Date']>;
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -207,14 +328,23 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
+  File: ResolverTypeWrapper<File>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  active: Active;
   book: ResolverTypeWrapper<Book>;
   bookInput: BookInput;
+  book_id: Book_Id;
   category: ResolverTypeWrapper<Category>;
+  checkCode: CheckCode;
+  home: ResolverTypeWrapper<Home>;
+  interestCategory: InterestCategory;
+  login: Login;
+  register: Register;
+  resetPassword: ResetPassword;
   review: ResolverTypeWrapper<Review>;
   user: ResolverTypeWrapper<User>;
   userInput: UserInput;
@@ -224,14 +354,23 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Date: Scalars['Date'];
+  File: File;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
   String: Scalars['String'];
+  active: Active;
   book: Book;
   bookInput: BookInput;
+  book_id: Book_Id;
   category: Category;
+  checkCode: CheckCode;
+  home: Home;
+  interestCategory: InterestCategory;
+  login: Login;
+  register: Register;
+  resetPassword: ResetPassword;
   review: Review;
   user: User;
   userInput: UserInput;
@@ -241,9 +380,26 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date';
 }
 
+export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationActiveArgs>>;
+  checkCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationCheckCodeArgs>>;
   createBook?: Resolver<Maybe<ResolversTypes['book']>, ParentType, ContextType, Partial<MutationCreateBookArgs>>;
+  createCategory?: Resolver<Maybe<ResolversTypes['category']>, ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'image' | 'name'>>;
+  createReview?: Resolver<Maybe<ResolversTypes['review']>, ParentType, ContextType, RequireFields<MutationCreateReviewArgs, 'bookId' | 'content' | 'userID'>>;
   createUser?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, Partial<MutationCreateUserArgs>>;
+  interest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationInterestArgs>>;
+  login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
+  myBooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationMyBooksArgs>>;
+  register?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
+  resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationResetPasswordArgs>>;
+  searchBook?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationSearchBookArgs>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -252,6 +408,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['category']>>>, ParentType, ContextType>;
   category?: Resolver<Maybe<ResolversTypes['category']>, ParentType, ContextType, RequireFields<QueryCategoryArgs, 'id'>>;
   deleteUser?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<QueryDeleteUserArgs, 'id'>>;
+  home?: Resolver<Maybe<ResolversTypes['home']>, ParentType, ContextType>;
   review?: Resolver<Maybe<ResolversTypes['review']>, ParentType, ContextType, RequireFields<QueryReviewArgs, 'id'>>;
   reviews?: Resolver<Maybe<Array<Maybe<ResolversTypes['review']>>>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
@@ -259,61 +416,77 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['book'] = ResolversParentTypes['book']> = {
-  audio_link?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  author?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  book_link?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  category?: Resolver<Array<Maybe<ResolversTypes['category']>>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  audio_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  book_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<Array<Maybe<ResolversTypes['category']>>>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  downloads?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  page?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   review?: Resolver<Maybe<Array<Maybe<ResolversTypes['review']>>>, ParentType, ContextType>;
-  star?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  star?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['category'] = ResolversParentTypes['category']> = {
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type HomeResolvers<ContextType = any, ParentType extends ResolversParentTypes['home'] = ResolversParentTypes['home']> = {
+  bestseller?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType>;
+  new_release?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType>;
+  recommended?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType>;
+  trend?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ReviewResolvers<ContextType = any, ParentType extends ResolversParentTypes['review'] = ResolversParentTypes['review']> = {
-  book?: Resolver<ResolversTypes['book'], ParentType, ContextType>;
-  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  book?: Resolver<Maybe<ResolversTypes['book']>, ParentType, ContextType>;
+  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['user'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['user'] = ResolversParentTypes['user']> = {
-  birthday?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  birthday?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  interest?: Resolver<Maybe<Array<Maybe<ResolversTypes['category']>>>, ParentType, ContextType>;
+  mybooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType>;
+  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   reviews?: Resolver<Maybe<Array<Maybe<ResolversTypes['review']>>>, ParentType, ContextType>;
   sub_end?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  subscription?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  subscription?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Date?: GraphQLScalarType;
+  File?: FileResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   book?: BookResolvers<ContextType>;
   category?: CategoryResolvers<ContextType>;
+  home?: HomeResolvers<ContextType>;
   review?: ReviewResolvers<ContextType>;
   user?: UserResolvers<ContextType>;
 };

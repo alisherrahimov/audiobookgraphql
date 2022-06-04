@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -11,50 +12,65 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
-  username     String
-  email        String    @unique
-  password     String
-  birthday     DateTime
-  image        String    @default("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200&d=mm&r=g")
-  subscription Boolean   @default(false)
+  id           String     @id @default(uuid())
+  username     String?
+  email        String?    @unique
+  password     String?
+  birthday     DateTime?
+  image        String?    @default("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200&d=mm&r=g")
+  subscription Boolean?   @default(false)
   sub_end      DateTime?
-  updatedAt    DateTime  @updatedAt
-  createdAt    DateTime  @default(now())
-  Review       Review[]
+  active       Boolean?   @default(false)
+  code         String?
+  interest     Category[]
+  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime   @default(now())
+  review       Review[]
+  mybooks      MyBooks[]
+}
+
+model MyBooks {
+  id     String  @id @default(uuid())
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 }
 
 model Category {
   id        String   @id @default(uuid())
-  name      String
-  image     String
+  name      String?
+  image     String?
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
-  Book      Book?    @relation(fields: [id], references: [id])
+  book      Book?    @relation(fields: [bookId], references: [id])
+  bookId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model Book {
   id          String     @id @default(uuid())
-  title       String
-  author      String
-  description String
-  image       String
-  audio_link  String
-  book_link   String
+  title       String?
+  author      String?
+  description String?
+  image       String?
+  audio_link  String?
+  book_link   String?
+  page        Int?
+  downloads   Int?
   category    Category[]
-  star        Int        @default(0)
+  star        Int?       @default(0)
   updatedAt   DateTime   @updatedAt
   createdAt   DateTime   @default(now())
-  Review      Review[]
+  review      Review[]
 }
 
 model Review {
   id        String   @id @default(uuid())
   user      User?    @relation(fields: [userId], references: [id])
   book      Book?    @relation(fields: [bookId], references: [id])
-  content   String
+  content   String?
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
-  userId    String   @unique
-  bookId    String   @unique
+  userId    String?  @unique
+  bookId    String?  @unique
 }

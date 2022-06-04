@@ -1,11 +1,18 @@
+import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
-import { User, UserInput } from "generated/graphql";
+import {
+  Book,
+  Book_Id,
+  MutationInterestArgs,
+  User,
+  UserInput,
+} from "generated/graphql";
 const client = new PrismaClient();
 const getUser = async (id: string): Promise<User> => {
   try {
     return await client.user.findFirst({
       where: { id: id },
-      include: { Review: true },
+      include: { review: true, interest: true },
     });
   } catch (e) {
     return e;
@@ -26,20 +33,63 @@ const deleteUser = async (id: string): Promise<User> => {
   }
 };
 const createUser = async (user: UserInput): Promise<User> => {
+  ////date year-month-day
   try {
     const dateString = Date.parse(user.birthday);
     const userBirthday = new Date(dateString);
+    const hash = bcrypt.hashSync(user.password, 10);
     return await client.user.create({
       data: {
         birthday: userBirthday,
         email: user.email,
         username: user.username,
-        password: user.password,
+        password: hash,
       },
-      include: { Review: true },
+      include: { review: true },
     });
   } catch (e) {
     return e;
   }
 };
-export { getUser, getAllUsers, deleteUser, createUser };
+const interestCategory = async (
+  uid: MutationInterestArgs
+): Promise<boolean> => {
+  const { id } = uid.input;
+
+  try {
+    id.forEach((item) => {
+      client.user.update({
+        data: {
+          interest: { set: { id: item } },
+        },
+        where: {
+          email: "1",
+        },
+      });
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+const saveBook = async (book: Book_Id): Promise<boolean> => {
+  try {
+    await client.user.create({
+      data: {
+        mybooks: { connect: [{ id: book.id[0] }] },
+      },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export {
+  getUser,
+  getAllUsers,
+  deleteUser,
+  createUser,
+  interestCategory,
+  saveBook,
+};

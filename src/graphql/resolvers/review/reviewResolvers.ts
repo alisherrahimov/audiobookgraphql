@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Review } from "generated/graphql";
-const client = new PrismaClient();
+export const client = new PrismaClient();
 
 const getAllReview = async (): Promise<Review[]> => {
   try {

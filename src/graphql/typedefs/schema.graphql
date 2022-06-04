@@ -1,76 +1,152 @@
-scalar Date
+# This file was generated based on ".graphqlconfig". Do not edit manually.
 
-type user {
-  id: ID!
-  username: String!
-  email: String!
-  password: String!
-  birthday: Date!
-  image: String!
-  subscription: Boolean!
-  sub_end: Date
-  createdAt: Date!
-  updatedAt: Date!
-  reviews: [review]
-}
-type review {
-  id: ID!
-  user: user!
-  book: book!
-  content: String!
-  createdAt: Date!
-  updatedAt: Date!
-}
-type book {
-  id: ID!
-  title: String!
-  author: String!
-  description: String!
-  image: String!
-  audio_link: String!
-  book_link: String!
-  category: [category]!
-  star: Int!
-  review: [review]
-  createdAt: Date!
-  updatedAt: Date!
+schema {
+  query: Query
+  mutation: Mutation
 }
 
-type category {
-  id: ID!
-  name: String!
-  image: String!
-  createdAt: Date!
-  updatedAt: Date!
+type File {
+  encoding: String!
+  filename: String!
+  mimetype: String!
+}
+
+type Mutation {
+  active(input: active): Boolean
+  createBook(input: bookInput): book
+  createCategory(image: String!, name: String!): category
+  createReview(bookId: ID!, content: String!, userID: String!): review
+  createUser(input: userInput): user
+  interest(input: interestCategory): Boolean
+  login(input: login!): String
+  myBooks(input: book_id): [book]
+  register(input: register!): String
+  searchBook(author: String, title: String): [book]
+  resetPassword(input: resetPassword): Boolean
+  checkCode(input: checkCode): Boolean
 }
 
 type Query {
-  user(id: ID!): user
-  users: [user]
-  deleteUser(id: ID!): user
   book(id: ID!): book
   books: [book]
-  category(id: ID!): category
   categories: [category]
+  category(id: ID!): category
+  deleteUser(id: ID!): user
+  home: home
   review(id: ID!): review
   reviews: [review]
+  user(id: ID!): user
+  users: [user]
 }
-input userInput {
-  username: String!
-  email: String!
-  password: String!
-  birthday: Date!
+
+type book {
+  audio_link: String
+  author: String
+  book_link: String
+  category: [category]
+  createdAt: Date
+  description: String
+  downloads: Int
+  id: ID
+  image: String
+  page: Int
+  review: [review]
+  star: Int
+  title: String
+  updatedAt: Date
 }
+
+type category {
+  createdAt: Date
+  id: ID
+  image: String
+  name: String
+  updatedAt: Date
+}
+
+type home {
+  bestseller: [book]
+  new_release: [book]
+  recommended: [book]
+  trend: [book]
+}
+
+type review {
+  book: book
+  content: String
+  createdAt: Date!
+  id: ID
+  updatedAt: Date!
+  user: user
+}
+
+type user {
+  active: Boolean
+  birthday: Date
+  code: String
+  createdAt: Date
+  email: String
+  id: ID
+  image: String
+  interest: [category]
+  mybooks: [book]
+  password: String
+  reviews: [review]
+  sub_end: Date
+  subscription: Boolean
+  updatedAt: Date
+  username: String
+}
+
+scalar Date
+
+input active {
+  code: String
+  email: String
+}
+
+input checkCode {
+  email: String
+  code: String
+}
+
 input bookInput {
-  id: ID!
-  title: String!
-  author: String!
-  description: String!
-  image: String!
-  audio_link: String!
-  book_link: String!
+  audio_link: String
+  author: String
+  book_link: String
+  description: String
+  id: ID
+  image: String
+  page: Int
+  title: String
 }
-type Mutation {
-  createUser(userInput: userInput): user
-  createBook(bookInput: bookInput): book
+input resetPassword {
+  email: String
+  password: String
+}
+
+input book_id {
+  id: [String]
+}
+
+input interestCategory {
+  id: [String]
+}
+
+input login {
+  email: String
+  password: String
+}
+
+input register {
+  date: Date
+  email: String
+  password: String
+}
+
+input userInput {
+  birthday: Date
+  email: String
+  password: String
+  username: String
 }

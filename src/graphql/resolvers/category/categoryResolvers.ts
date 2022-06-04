@@ -1,11 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 import { Category } from "generated/graphql";
-
-const client = new PrismaClient();
+export const client = new PrismaClient();
 
 const getCategory = async (id: string): Promise<Category> => {
   try {
-    const category = await client.category.findFirst();
+    const category = await client.category.findFirst({
+      where: {
+        id,
+      },
+    });
     return category;
   } catch (e) {
     return e;
