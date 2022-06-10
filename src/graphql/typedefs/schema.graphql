@@ -10,11 +10,18 @@ type File {
   filename: String!
   mimetype: String!
 }
+input forgetPassword {
+  email: String
+}
+
+input getByCategory {
+  id: String
+}
 
 type Mutation {
   active(input: active): Boolean
   createBook(input: bookInput): book
-  createCategory(image: String!, name: String!): category
+  createCategory(name: String!): category
   createReview(bookId: ID!, content: String!, userID: String!): review
   createUser(input: userInput): user
   interest(input: interestCategory): Boolean
@@ -24,6 +31,8 @@ type Mutation {
   searchBook(author: String, title: String): [book]
   resetPassword(input: resetPassword): Boolean
   checkCode(input: checkCode): Boolean
+  forgetPassword(input: forgetPassword): Boolean
+  getBookByCategory(input: getByCategory): [book]
 }
 
 type Query {
@@ -59,7 +68,6 @@ type book {
 type category {
   createdAt: Date
   id: ID
-  image: String
   name: String
   updatedAt: Date
 }
@@ -119,6 +127,7 @@ input bookInput {
   image: String
   page: Int
   title: String
+  category: [String]
 }
 input resetPassword {
   email: String

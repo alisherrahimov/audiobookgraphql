@@ -8,12 +8,14 @@ import {
 } from "./auth/authResolver";
 import {
   Book,
+  BookInput,
   Book_Id,
   Category,
   Home,
   MutationActiveArgs,
   MutationCheckCodeArgs,
   MutationCreateReviewArgs,
+  MutationForgetPasswordArgs,
   MutationInterestArgs,
   MutationLoginArgs,
   MutationRegisterArgs,
@@ -31,6 +33,7 @@ import {
   createReview,
   getAllBooks,
   getBook,
+  getBookByCategory,
   home,
   search,
 } from "./book/bookResolver";
@@ -90,7 +93,7 @@ const resolvers = {
       return await createUser(args.input);
     },
     // Create book route
-    createBook: async (_: any, args: { input: Book }): Promise<Book> => {
+    createBook: async (_: any, args: { input: BookInput }): Promise<Book> => {
       return await createBook(args.input);
     },
     // Login route
@@ -135,12 +138,9 @@ const resolvers = {
     //create category route
     createCategory: async (
       _: any,
-      args: { input: Category }
+      args: { name: string }
     ): Promise<Category> => {
-      return await createCategory({
-        image: args.input.image,
-        name: args.input.name,
-      });
+      return await createCategory({ name: args.name });
     },
     //search book route
     searchBook: async (
@@ -151,9 +151,9 @@ const resolvers = {
     },
     forgetPassword: async (
       _: any,
-      args: { email: string }
+      args: { input: MutationForgetPasswordArgs }
     ): Promise<boolean> => {
-      return await ForgetPassword(args.email);
+      return await ForgetPassword(args.input.input.email);
     },
     resetPassword: async (
       _: any,
@@ -166,6 +166,12 @@ const resolvers = {
       args: { input: MutationCheckCodeArgs }
     ): Promise<boolean> => {
       return await CheckCode(args.input);
+    },
+    getBookByCategory: async (
+      _: any,
+      args: { input: string }
+    ): Promise<Book[] | null> => {
+      return await getBookByCategory(args.input);
     },
   },
 };

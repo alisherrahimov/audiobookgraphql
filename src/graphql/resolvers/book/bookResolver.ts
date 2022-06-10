@@ -28,6 +28,12 @@ const getAllBooks = async (): Promise<Book[] | null> => {
   }
 };
 const createBook = async (book: BookInput): Promise<Book> => {
+  const cate = book.category.map((val, index) => {
+    return {
+      id: val,
+    };
+  });
+
   try {
     const newBook = await client.book.create({
       data: {
@@ -37,6 +43,11 @@ const createBook = async (book: BookInput): Promise<Book> => {
         image: book.image,
         title: book.title,
         description: book.description,
+        category: {
+          createMany: {
+            data: cate,
+          },
+        },
       },
       include: { category: true },
     });
@@ -113,15 +124,11 @@ const createReview = async (
     return error;
   }
 };
-const createCategory = async (category: {
-  name: string;
-  image: string;
-}): Promise<Category> => {
+const createCategory = async (category: Category): Promise<Category> => {
   try {
     const newCategory = await client.category.create({
       data: {
         name: category.name,
-        image: category.image,
       },
     });
     return newCategory;
@@ -129,6 +136,19 @@ const createCategory = async (category: {
     return error;
   }
 };
+const getBookByCategory = async (id: string): Promise<Book[] | null> => {
+  return await client.book.findMany({
+    where: {
+      category: {
+        some: {
+          id: id,
+        },
+      },
+    },
+    take: 15,
+  });
+};
+
 export {
   getBook,
   getAllBooks,
@@ -137,4 +157,5 @@ export {
   search,
   createReview,
   createCategory,
+  getBookByCategory,
 };

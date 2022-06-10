@@ -30,6 +30,8 @@ export type Mutation = {
   createCategory?: Maybe<Category>;
   createReview?: Maybe<Review>;
   createUser?: Maybe<User>;
+  forgetPassword?: Maybe<Scalars['Boolean']>;
+  getBookByCategory?: Maybe<Array<Maybe<Book>>>;
   interest?: Maybe<Scalars['Boolean']>;
   login?: Maybe<Scalars['String']>;
   myBooks?: Maybe<Array<Maybe<Book>>>;
@@ -55,7 +57,6 @@ export type MutationCreateBookArgs = {
 
 
 export type MutationCreateCategoryArgs = {
-  image: Scalars['String'];
   name: Scalars['String'];
 };
 
@@ -69,6 +70,16 @@ export type MutationCreateReviewArgs = {
 
 export type MutationCreateUserArgs = {
   input?: InputMaybe<UserInput>;
+};
+
+
+export type MutationForgetPasswordArgs = {
+  input?: InputMaybe<ForgetPassword>;
+};
+
+
+export type MutationGetBookByCategoryArgs = {
+  input?: InputMaybe<GetByCategory>;
 };
 
 
@@ -168,6 +179,7 @@ export type BookInput = {
   audio_link?: InputMaybe<Scalars['String']>;
   author?: InputMaybe<Scalars['String']>;
   book_link?: InputMaybe<Scalars['String']>;
+  category?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   image?: InputMaybe<Scalars['String']>;
@@ -183,7 +195,6 @@ export type Category = {
   __typename?: 'category';
   createdAt?: Maybe<Scalars['Date']>;
   id?: Maybe<Scalars['ID']>;
-  image?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
 };
@@ -191,6 +202,14 @@ export type Category = {
 export type CheckCode = {
   code?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
+};
+
+export type ForgetPassword = {
+  email?: InputMaybe<Scalars['String']>;
+};
+
+export type GetByCategory = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type Home = {
@@ -340,6 +359,8 @@ export type ResolversTypes = {
   book_id: Book_Id;
   category: ResolverTypeWrapper<Category>;
   checkCode: CheckCode;
+  forgetPassword: ForgetPassword;
+  getByCategory: GetByCategory;
   home: ResolverTypeWrapper<Home>;
   interestCategory: InterestCategory;
   login: Login;
@@ -366,6 +387,8 @@ export type ResolversParentTypes = {
   book_id: Book_Id;
   category: Category;
   checkCode: CheckCode;
+  forgetPassword: ForgetPassword;
+  getByCategory: GetByCategory;
   home: Home;
   interestCategory: InterestCategory;
   login: Login;
@@ -391,9 +414,11 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationActiveArgs>>;
   checkCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationCheckCodeArgs>>;
   createBook?: Resolver<Maybe<ResolversTypes['book']>, ParentType, ContextType, Partial<MutationCreateBookArgs>>;
-  createCategory?: Resolver<Maybe<ResolversTypes['category']>, ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'image' | 'name'>>;
+  createCategory?: Resolver<Maybe<ResolversTypes['category']>, ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
   createReview?: Resolver<Maybe<ResolversTypes['review']>, ParentType, ContextType, RequireFields<MutationCreateReviewArgs, 'bookId' | 'content' | 'userID'>>;
   createUser?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, Partial<MutationCreateUserArgs>>;
+  forgetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationForgetPasswordArgs>>;
+  getBookByCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationGetBookByCategoryArgs>>;
   interest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationInterestArgs>>;
   login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   myBooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationMyBooksArgs>>;
@@ -436,7 +461,6 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['category'] = ResolversParentTypes['category']> = {
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
