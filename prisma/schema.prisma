@@ -21,7 +21,7 @@ model User {
   subscription Boolean?   @default(false)
   sub_end      DateTime?
   active       Boolean?   @default(false)
-  code         String?
+  code         Int?
   interest     Category[]
   updatedAt    DateTime   @updatedAt
   createdAt    DateTime   @default(now())

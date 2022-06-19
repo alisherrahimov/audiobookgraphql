@@ -28,12 +28,6 @@ const getAllBooks = async (): Promise<Book[] | null> => {
   }
 };
 const createBook = async (book: BookInput): Promise<Book> => {
-  const cate = book.category.map((val, index) => {
-    return {
-      id: val,
-    };
-  });
-
   try {
     const newBook = await client.book.create({
       data: {
@@ -42,12 +36,8 @@ const createBook = async (book: BookInput): Promise<Book> => {
         book_link: book.book_link,
         image: book.image,
         title: book.title,
+        page: book.page,
         description: book.description,
-        category: {
-          createMany: {
-            data: cate,
-          },
-        },
       },
       include: { category: true },
     });

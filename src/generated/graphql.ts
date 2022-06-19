@@ -22,6 +22,11 @@ export type File = {
   mimetype: Scalars['String'];
 };
 
+export type LoginInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   active?: Maybe<Scalars['Boolean']>;
@@ -30,24 +35,26 @@ export type Mutation = {
   createCategory?: Maybe<Category>;
   createReview?: Maybe<Review>;
   createUser?: Maybe<User>;
-  forgetPassword?: Maybe<Scalars['Boolean']>;
+  forgetPassword?: Maybe<ResponseType>;
   getBookByCategory?: Maybe<Array<Maybe<Book>>>;
   interest?: Maybe<Scalars['Boolean']>;
-  login?: Maybe<Scalars['String']>;
+  login: ResponseType;
   myBooks?: Maybe<Array<Maybe<Book>>>;
-  register?: Maybe<Scalars['String']>;
-  resetPassword?: Maybe<Scalars['Boolean']>;
+  register?: Maybe<ResponseType>;
+  resetPassword?: Maybe<ResponseType>;
   searchBook?: Maybe<Array<Maybe<Book>>>;
 };
 
 
 export type MutationActiveArgs = {
-  input?: InputMaybe<Active>;
+  code?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
 };
 
 
 export type MutationCheckCodeArgs = {
-  input?: InputMaybe<CheckCode>;
+  code?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -69,12 +76,12 @@ export type MutationCreateReviewArgs = {
 
 
 export type MutationCreateUserArgs = {
-  input?: InputMaybe<UserInput>;
+  input: UserInput;
 };
 
 
 export type MutationForgetPasswordArgs = {
-  input?: InputMaybe<ForgetPassword>;
+  email?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -89,7 +96,7 @@ export type MutationInterestArgs = {
 
 
 export type MutationLoginArgs = {
-  input: Login;
+  input: LoginInput;
 };
 
 
@@ -99,12 +106,16 @@ export type MutationMyBooksArgs = {
 
 
 export type MutationRegisterArgs = {
-  input: Register;
+  date?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 
 export type MutationResetPasswordArgs = {
-  input?: InputMaybe<ResetPassword>;
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -152,8 +163,14 @@ export type QueryUserArgs = {
   id: Scalars['ID'];
 };
 
+export type ResponseType = {
+  __typename?: 'ResponseType';
+  error: Scalars['Boolean'];
+  message: Scalars['String'];
+};
+
 export type Active = {
-  code?: InputMaybe<Scalars['String']>;
+  code?: InputMaybe<Scalars['Int']>;
   email?: InputMaybe<Scalars['String']>;
 };
 
@@ -181,7 +198,6 @@ export type BookInput = {
   book_link?: InputMaybe<Scalars['String']>;
   category?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   description?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
   image?: InputMaybe<Scalars['String']>;
   page?: InputMaybe<Scalars['Int']>;
   title?: InputMaybe<Scalars['String']>;
@@ -200,7 +216,7 @@ export type Category = {
 };
 
 export type CheckCode = {
-  code?: InputMaybe<Scalars['String']>;
+  code?: InputMaybe<Scalars['Int']>;
   email?: InputMaybe<Scalars['String']>;
 };
 
@@ -233,6 +249,7 @@ export type Register = {
   date?: InputMaybe<Scalars['Date']>;
   email?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 export type ResetPassword = {
@@ -254,7 +271,7 @@ export type User = {
   __typename?: 'user';
   active?: Maybe<Scalars['Boolean']>;
   birthday?: Maybe<Scalars['Date']>;
-  code?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['Date']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
@@ -350,8 +367,10 @@ export type ResolversTypes = {
   File: ResolverTypeWrapper<File>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  LoginInput: LoginInput;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  ResponseType: ResolverTypeWrapper<ResponseType>;
   String: ResolverTypeWrapper<Scalars['String']>;
   active: Active;
   book: ResolverTypeWrapper<Book>;
@@ -378,8 +397,10 @@ export type ResolversParentTypes = {
   File: File;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  LoginInput: LoginInput;
   Mutation: {};
   Query: {};
+  ResponseType: ResponseType;
   String: Scalars['String'];
   active: Active;
   book: Book;
@@ -416,14 +437,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createBook?: Resolver<Maybe<ResolversTypes['book']>, ParentType, ContextType, Partial<MutationCreateBookArgs>>;
   createCategory?: Resolver<Maybe<ResolversTypes['category']>, ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
   createReview?: Resolver<Maybe<ResolversTypes['review']>, ParentType, ContextType, RequireFields<MutationCreateReviewArgs, 'bookId' | 'content' | 'userID'>>;
-  createUser?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, Partial<MutationCreateUserArgs>>;
-  forgetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationForgetPasswordArgs>>;
+  createUser?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
+  forgetPassword?: Resolver<Maybe<ResolversTypes['ResponseType']>, ParentType, ContextType, Partial<MutationForgetPasswordArgs>>;
   getBookByCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationGetBookByCategoryArgs>>;
   interest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationInterestArgs>>;
-  login?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
+  login?: Resolver<ResolversTypes['ResponseType'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'input'>>;
   myBooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationMyBooksArgs>>;
-  register?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationRegisterArgs, 'input'>>;
-  resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationResetPasswordArgs>>;
+  register?: Resolver<Maybe<ResolversTypes['ResponseType']>, ParentType, ContextType, Partial<MutationRegisterArgs>>;
+  resetPassword?: Resolver<Maybe<ResolversTypes['ResponseType']>, ParentType, ContextType, Partial<MutationResetPasswordArgs>>;
   searchBook?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationSearchBookArgs>>;
 };
 
@@ -438,6 +459,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   reviews?: Resolver<Maybe<Array<Maybe<ResolversTypes['review']>>>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Maybe<Array<Maybe<ResolversTypes['user']>>>, ParentType, ContextType>;
+};
+
+export type ResponseTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ResponseType'] = ResolversParentTypes['ResponseType']> = {
+  error?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['book'] = ResolversParentTypes['book']> = {
@@ -487,7 +514,7 @@ export type ReviewResolvers<ContextType = any, ParentType extends ResolversParen
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['user'] = ResolversParentTypes['user']> = {
   active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   birthday?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  code?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
@@ -508,6 +535,7 @@ export type Resolvers<ContextType = any> = {
   File?: FileResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  ResponseType?: ResponseTypeResolvers<ContextType>;
   book?: BookResolvers<ContextType>;
   category?: CategoryResolvers<ContextType>;
   home?: HomeResolvers<ContextType>;

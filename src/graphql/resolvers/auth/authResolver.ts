@@ -1,68 +1,117 @@
-import {
-  MutationLoginArgs,
-  MutationRegisterArgs,
-  MutationActiveArgs,
-  MutationResetPasswordArgs,
-  MutationCheckCodeArgs,
-} from "generated/graphql";
+import { ResponseType } from "./../../../helper/type/ResponseType";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { sendEmail } from "../../../helper/sendEmail";
+import {
+  LoginInputType,
+  RegisterInputType,
+} from "helper/type/authType/auth.type";
 
 export const client = new PrismaClient();
-export const Login = async (user: MutationLoginArgs): Promise<string> => {
-  const { email, password } = user.input;
+export const Login = async ({
+  email,
+  password,
+}: LoginInputType): Promise<ResponseType> => {
   try {
-    const person = await client.user.findUnique({ where: { email } });
+    const person = await client.user.findUnique({
+      where: { email },
+    });
+
     if (!person) {
-      return "User not found";
+      return {
+        error: true,
+        message: "User not found",
+      };
     }
-    const deCode = bcrypt.compareSync(person.password, password);
+    if (!person?.active) {
+      return {
+        error: true,
+        message: "User not active",
+      };
+    }
+    const deCode = bcrypt.compareSync(password, person?.password);
     if (deCode) {
       const token = jwt.sign(person, process.env.token_key, {
         expiresIn: "10d",
       });
-      return token;
+      return {
+        error: false,
+        message: token,
+      };
+    } else {
+      return {
+        error: true,
+        message: "Password incorrect",
+      };
     }
-    return "Password wrong";
   } catch (error) {
-    return error;
+    return {
+      error: true,
+      message: error,
+    };
   }
 };
 
-export const Register = async (user: MutationRegisterArgs): Promise<string> => {
-  const { date, email, password } = user.input;
+export const Register = async ({
+  email,
+  date,
+  password,
+  username,
+}: RegisterInputType): Promise<ResponseType> => {
+  const dateString = Date.parse(date);
+  const userBirthday = new Date(dateString);
   try {
     const findUser = await client.user.findUnique({
       where: {
         email: email,
       },
     });
-    if (findUser) {
-      return "User already registered";
+    if (findUser?.active) {
+      return {
+        error: true,
+        message: "User already exist",
+      };
     }
     const hash = bcrypt.hashSync(password, 10);
-    await client.user.create({
-      data: {
-        email,
-        birthday: date,
+    await client.user.upsert({
+      create: {
+        username: username,
+        email: email,
         password: hash,
+        birthday: userBirthday,
+      },
+      update: {
+        username: username,
+        email: email,
+        password: hash,
+        birthday: userBirthday,
+      },
+      where: {
+        email: email,
       },
     });
     if (await sendEmail(email)) {
-      return Login({ input: { email: email, password: password } });
+      return {
+        error: false,
+        message: "User created and sms sent",
+      };
+    } else {
+      return {
+        error: true,
+        message: "User created but sms not sent",
+      };
     }
-    return "not send sms";
   } catch (error) {
     return error;
   }
 };
 
-export const Active = async (
-  verificationCode: MutationActiveArgs
-): Promise<boolean> => {
-  const { code, email } = verificationCode.input;
+export const ActiveUser = async (verificationCode: {
+  email: string;
+  code: number;
+}): Promise<boolean> => {
+  const { code, email } = verificationCode;
   try {
     const activeUser = await client.user.findUnique({
       where: {
@@ -87,7 +136,7 @@ export const Active = async (
   }
 };
 
-export const ForgetPassword = async (email: string): Promise<boolean> => {
+export const ForgetPassword = async (email: string): Promise<ResponseType> => {
   try {
     const user = await client.user.findFirst({
       where: {
@@ -95,20 +144,25 @@ export const ForgetPassword = async (email: string): Promise<boolean> => {
       },
     });
     if (!user) {
-      return false;
+      return {
+        error: true,
+        message: "User not found",
+      };
     }
     const generateLink = await sendEmail(email);
     if (generateLink) {
-      return true;
+      return {
+        message: "SMS send",
+      };
     }
   } catch (error) {
     return error;
   }
 };
 export const CheckCode = async (
-  verificationCode: MutationCheckCodeArgs
-): Promise<boolean> => {
-  const { email, code } = verificationCode.input;
+  email: string,
+  code: number
+): Promise<ResponseType> => {
   try {
     const user = await client.user.findFirst({
       where: {
@@ -116,10 +170,16 @@ export const CheckCode = async (
       },
     });
     if (!user) {
-      return false;
+      return {
+        error: true,
+        message: "User not found",
+      };
     }
     if (user.code == code) {
-      return true;
+      return {
+        error: false,
+        message: "Code correct",
+      };
     }
   } catch (error) {
     return error;
@@ -127,9 +187,9 @@ export const CheckCode = async (
 };
 
 export const ResetPassword = async (
-  resetPassword: MutationResetPasswordArgs
-): Promise<boolean> => {
-  const { password, email } = resetPassword.input;
+  email: string,
+  password: string
+): Promise<ResponseType> => {
   try {
     const user = await client.user.findFirst({
       where: {
@@ -137,7 +197,10 @@ export const ResetPassword = async (
       },
     });
     if (!user) {
-      return false;
+      return {
+        error: true,
+        message: "User not found",
+      };
     }
 
     const hash = bcrypt.hashSync(password, 10);
@@ -149,7 +212,10 @@ export const ResetPassword = async (
         email: email,
       },
     });
-    return true;
+    return {
+      error: false,
+      message: "Password reset",
+    };
   } catch (error) {
     return error;
   }

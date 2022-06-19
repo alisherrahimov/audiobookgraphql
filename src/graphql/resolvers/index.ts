@@ -1,5 +1,5 @@
 import {
-  Active,
+  ActiveUser,
   CheckCode,
   ForgetPassword,
   Login,
@@ -7,11 +7,13 @@ import {
   ResetPassword,
 } from "./auth/authResolver";
 import {
+  Active,
   Book,
   BookInput,
   Book_Id,
   Category,
   Home,
+  LoginInput,
   MutationActiveArgs,
   MutationCheckCodeArgs,
   MutationCreateReviewArgs,
@@ -47,6 +49,7 @@ import {
   interestCategory,
   saveBook,
 } from "./user/userResolver";
+import { ResponseType } from "helper/type/ResponseType";
 
 const resolvers = {
   Query: {
@@ -99,23 +102,33 @@ const resolvers = {
     // Login route
     login: async (
       _: any,
-      arg: { input: MutationLoginArgs }
-    ): Promise<string> => {
-      return await Login(arg.input);
+      arg: { input: LoginInput }
+    ): Promise<ResponseType> => {
+      const { email, password } = arg.input;
+      return await Login({ email: email, password: password });
     },
     //User register route
     register: async (
       _: any,
-      arg: { input: MutationRegisterArgs }
-    ): Promise<string> => {
-      return await Register(arg.input);
+      arg: {
+        email: string;
+        password: string;
+        username: string;
+        date: string;
+      }
+    ): Promise<ResponseType> => {
+      const { date, email, password, username } = arg;
+      return await Register({ date, email, password, username });
     },
     //Confiramation code route
     active: async (
       _: any,
-      args: { input: MutationActiveArgs }
+      args: { email: string; code: number }
     ): Promise<boolean> => {
-      return await Active(args.input);
+      return await ActiveUser({
+        email: args.email,
+        code: args.code,
+      });
     },
     //User interesting route
     interest: async (
@@ -151,21 +164,21 @@ const resolvers = {
     },
     forgetPassword: async (
       _: any,
-      args: { input: MutationForgetPasswordArgs }
-    ): Promise<boolean> => {
-      return await ForgetPassword(args.input.input.email);
+      args: { email: string }
+    ): Promise<ResponseType> => {
+      return await ForgetPassword(args.email);
     },
     resetPassword: async (
       _: any,
-      args: { input: MutationResetPasswordArgs }
-    ): Promise<boolean> => {
-      return await ResetPassword(args.input);
+      args: { email: string; password: string }
+    ): Promise<ResponseType> => {
+      return await ResetPassword(args.email, args.password);
     },
     checkCode: async (
       _: any,
-      args: { input: MutationCheckCodeArgs }
-    ): Promise<boolean> => {
-      return await CheckCode(args.input);
+      args: { email: string; code: number }
+    ): Promise<ResponseType> => {
+      return await CheckCode(args.email, args.code);
     },
     getBookByCategory: async (
       _: any,

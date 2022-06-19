@@ -18,20 +18,34 @@ input getByCategory {
   id: String
 }
 
+type ResponseType {
+  error: Boolean!
+  message: String!
+}
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  active(input: active): Boolean
+  active(email: String, code: Int): Boolean
   createBook(input: bookInput): book
   createCategory(name: String!): category
   createReview(bookId: ID!, content: String!, userID: String!): review
-  createUser(input: userInput): user
+  createUser(input: userInput!): user
   interest(input: interestCategory): Boolean
-  login(input: login!): String
+  login(input: LoginInput!): ResponseType!
   myBooks(input: book_id): [book]
-  register(input: register!): String
+  register(
+    email: String
+    date: String
+    password: String
+    username: String
+  ): ResponseType
   searchBook(author: String, title: String): [book]
-  resetPassword(input: resetPassword): Boolean
-  checkCode(input: checkCode): Boolean
-  forgetPassword(input: forgetPassword): Boolean
+  resetPassword(email: String, password: String): ResponseType
+  checkCode(email: String, code: Int): Boolean
+  forgetPassword(email: String): ResponseType
   getBookByCategory(input: getByCategory): [book]
 }
 
@@ -91,7 +105,7 @@ type review {
 type user {
   active: Boolean
   birthday: Date
-  code: String
+  code: Int
   createdAt: Date
   email: String
   id: ID
@@ -109,13 +123,13 @@ type user {
 scalar Date
 
 input active {
-  code: String
+  code: Int
   email: String
 }
 
 input checkCode {
   email: String
-  code: String
+  code: Int
 }
 
 input bookInput {
@@ -123,7 +137,6 @@ input bookInput {
   author: String
   book_link: String
   description: String
-  id: ID
   image: String
   page: Int
   title: String
@@ -151,6 +164,7 @@ input register {
   date: Date
   email: String
   password: String
+  username: String
 }
 
 input userInput {
