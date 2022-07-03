@@ -7,21 +7,13 @@ import {
   ResetPassword,
 } from "./auth/authResolver";
 import {
-  Active,
   Book,
-  BookInput,
   Book_Id,
   Category,
   Home,
   LoginInput,
-  MutationActiveArgs,
-  MutationCheckCodeArgs,
   MutationCreateReviewArgs,
-  MutationForgetPasswordArgs,
   MutationInterestArgs,
-  MutationLoginArgs,
-  MutationRegisterArgs,
-  MutationResetPasswordArgs,
   MutationSearchBookArgs,
   QueryBookArgs,
   QueryCategoryArgs,
@@ -30,7 +22,6 @@ import {
   User,
 } from "../../generated/graphql";
 import {
-  createBook,
   createCategory,
   createReview,
   getAllBooks,
@@ -95,10 +86,7 @@ const resolvers = {
     createUser: async (_: any, args: { input: User }): Promise<User> => {
       return await createUser(args.input);
     },
-    // Create book route
-    createBook: async (_: any, args: { input: BookInput }): Promise<Book> => {
-      return await createBook(args.input);
-    },
+
     // Login route
     login: async (
       _: any,

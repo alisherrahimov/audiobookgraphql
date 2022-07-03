@@ -31,7 +31,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   active?: Maybe<Scalars['Boolean']>;
   checkCode?: Maybe<Scalars['Boolean']>;
-  createBook?: Maybe<Book>;
   createCategory?: Maybe<Category>;
   createReview?: Maybe<Review>;
   createUser?: Maybe<User>;
@@ -55,11 +54,6 @@ export type MutationActiveArgs = {
 export type MutationCheckCodeArgs = {
   code?: InputMaybe<Scalars['Int']>;
   email?: InputMaybe<Scalars['String']>;
-};
-
-
-export type MutationCreateBookArgs = {
-  input?: InputMaybe<BookInput>;
 };
 
 
@@ -190,17 +184,6 @@ export type Book = {
   star?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['Date']>;
-};
-
-export type BookInput = {
-  audio_link?: InputMaybe<Scalars['String']>;
-  author?: InputMaybe<Scalars['String']>;
-  book_link?: InputMaybe<Scalars['String']>;
-  category?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  description?: InputMaybe<Scalars['String']>;
-  image?: InputMaybe<Scalars['String']>;
-  page?: InputMaybe<Scalars['Int']>;
-  title?: InputMaybe<Scalars['String']>;
 };
 
 export type Book_Id = {
@@ -374,7 +357,6 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   active: Active;
   book: ResolverTypeWrapper<Book>;
-  bookInput: BookInput;
   book_id: Book_Id;
   category: ResolverTypeWrapper<Category>;
   checkCode: CheckCode;
@@ -404,7 +386,6 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   active: Active;
   book: Book;
-  bookInput: BookInput;
   book_id: Book_Id;
   category: Category;
   checkCode: CheckCode;
@@ -434,7 +415,6 @@ export type FileResolvers<ContextType = any, ParentType extends ResolversParentT
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationActiveArgs>>;
   checkCode?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationCheckCodeArgs>>;
-  createBook?: Resolver<Maybe<ResolversTypes['book']>, ParentType, ContextType, Partial<MutationCreateBookArgs>>;
   createCategory?: Resolver<Maybe<ResolversTypes['category']>, ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
   createReview?: Resolver<Maybe<ResolversTypes['review']>, ParentType, ContextType, RequireFields<MutationCreateReviewArgs, 'bookId' | 'content' | 'userID'>>;
   createUser?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;

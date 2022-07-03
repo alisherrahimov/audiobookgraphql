@@ -29,7 +29,6 @@ input LoginInput {
 
 type Mutation {
   active(email: String, code: Int): Boolean
-  createBook(input: bookInput): book
   createCategory(name: String!): category
   createReview(bookId: ID!, content: String!, userID: String!): review
   createUser(input: userInput!): user
@@ -132,16 +131,6 @@ input checkCode {
   code: Int
 }
 
-input bookInput {
-  audio_link: String
-  author: String
-  book_link: String
-  description: String
-  image: String
-  page: Int
-  title: String
-  category: [String]
-}
 input resetPassword {
   email: String
   password: String

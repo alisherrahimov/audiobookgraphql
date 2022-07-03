@@ -1,9 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import {
   Book,
-  BookInput,
   Home,
-  HomeResolvers,
   Category,
   MutationCreateReviewArgs,
 } from "generated/graphql";
@@ -27,25 +25,25 @@ const getAllBooks = async (): Promise<Book[] | null> => {
     return e;
   }
 };
-const createBook = async (book: BookInput): Promise<Book> => {
-  try {
-    const newBook = await client.book.create({
-      data: {
-        audio_link: book.audio_link,
-        author: book.author,
-        book_link: book.book_link,
-        image: book.image,
-        title: book.title,
-        page: book.page,
-        description: book.description,
-      },
-      include: { category: true },
-    });
-    return newBook;
-  } catch (e) {
-    return e;
-  }
-};
+// const createBook = async (book: BookInput): Promise<Book> => {
+//   try {
+//     const newBook = await client.book.create({
+//       data: {
+//         audio_link: book.audio_link,
+//         author: book.author,
+//         book_link: book.book_link,
+//         image: book.image,
+//         title: book.title,
+//         page: book.page,
+//         description: book.description,
+//       },
+//       include: { category: true },
+//     });
+//     return newBook;
+//   } catch (e) {
+//     return e;
+//   }
+// };
 const home = async (): Promise<Home> => {
   let token: string = "";
   try {
@@ -142,7 +140,6 @@ const getBookByCategory = async (id: string): Promise<Book[] | null> => {
 export {
   getBook,
   getAllBooks,
-  createBook,
   home,
   search,
   createReview,

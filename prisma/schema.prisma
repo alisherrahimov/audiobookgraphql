@@ -55,7 +55,7 @@ model Book {
   audio_link  String?
   book_link   String?
   page        Int?
-  downloads   Int?
+  downloads   Int?       @default(0)
   category    Category[]
   star        Int?       @default(0)
   updatedAt   DateTime   @updatedAt
