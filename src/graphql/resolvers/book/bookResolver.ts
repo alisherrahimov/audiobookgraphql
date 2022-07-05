@@ -25,47 +25,28 @@ const getAllBooks = async (): Promise<Book[] | null> => {
     return e;
   }
 };
-// const createBook = async (book: BookInput): Promise<Book> => {
-//   try {
-//     const newBook = await client.book.create({
-//       data: {
-//         audio_link: book.audio_link,
-//         author: book.author,
-//         book_link: book.book_link,
-//         image: book.image,
-//         title: book.title,
-//         page: book.page,
-//         description: book.description,
-//       },
-//       include: { category: true },
-//     });
-//     return newBook;
-//   } catch (e) {
-//     return e;
-//   }
-// };
+
 const home = async (): Promise<Home> => {
   let token: string = "";
   try {
     const recommended = await client.book.findMany({
-      where: { category: { some: { id: token } } },
-      take: 3,
+      take: 10,
       include: { category: true, review: true },
     });
     const bestseller = await client.book.findMany({
-      where: { category: { some: { id: token } } },
-      take: 3,
+      // where: { category: { some: { id: token } } },
+      take: 10,
       include: { category: true, review: true },
     });
     const new_release = await client.book.findMany({
-      where: { category: { some: { id: token } } },
-      take: 3,
+      // where: { category: { some: { id: token } } },
+      take: 10,
       include: { category: true, review: true },
     });
     const trend = await client.book.findMany({
-      where: { category: { some: { id: token } } },
+      // where: { category: { some: { id: token } } },
       include: { category: true, review: true },
-      take: 3,
+      take: 10,
     });
     return {
       recommended: recommended,
@@ -77,18 +58,18 @@ const home = async (): Promise<Home> => {
     return error;
   }
 };
-const search = async (
-  title: string,
-  author: string
-): Promise<Book[] | null> => {
+const search = async (text: string): Promise<Book[] | null> => {
   try {
     return await client.book.findMany({
       where: {
         title: {
-          search: title || author,
+          search: text,
         },
         description: {
-          search: title || author,
+          search: text,
+        },
+        author: {
+          search: text,
         },
       },
     });

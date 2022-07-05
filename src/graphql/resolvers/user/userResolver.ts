@@ -35,12 +35,9 @@ const deleteUser = async (id: string): Promise<User> => {
 const createUser = async (user: UserInput): Promise<User> => {
   ////date year-month-day
   try {
-    const dateString = Date.parse(user.birthday);
-    const userBirthday = new Date(dateString);
     const hash = bcrypt.hashSync(user.password, 10);
     return await client.user.create({
       data: {
-        birthday: userBirthday,
         email: user.email,
         username: user.username,
         password: hash,
@@ -74,9 +71,12 @@ const interestCategory = async (
 
 const saveBook = async (book: Book_Id): Promise<boolean> => {
   try {
-    await client.user.create({
+    await client.user.update({
       data: {
-        mybooks: { connect: [{ id: book.id[0] }] },
+        mybooks: { set: { id: book.id } },
+      },
+      where: {
+        id: book.id,
       },
     });
     return true;

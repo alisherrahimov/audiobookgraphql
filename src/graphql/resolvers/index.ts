@@ -146,9 +146,9 @@ const resolvers = {
     //search book route
     searchBook: async (
       _: any,
-      args: { input: MutationSearchBookArgs }
+      args: { text: string }
     ): Promise<Book[] | null> => {
-      return await search(args.input.author, args.input.title);
+      return await search(args.text);
     },
     forgetPassword: async (
       _: any,

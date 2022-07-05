@@ -55,12 +55,9 @@ export const Login = async ({
 
 export const Register = async ({
   email,
-  date,
   password,
   username,
 }: RegisterInputType): Promise<ResponseType> => {
-  const dateString = Date.parse(date);
-  const userBirthday = new Date(dateString);
   try {
     const findUser = await client.user.findUnique({
       where: {
@@ -79,13 +76,11 @@ export const Register = async ({
         username: username,
         email: email,
         password: hash,
-        birthday: userBirthday,
       },
       update: {
         username: username,
         email: email,
         password: hash,
-        birthday: userBirthday,
       },
       where: {
         email: email,

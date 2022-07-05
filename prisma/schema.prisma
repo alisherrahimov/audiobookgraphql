@@ -14,9 +14,8 @@ datasource db {
 model User {
   id           String     @id @default(uuid())
   username     String?
-  email        String?    @unique
-  password     String?
-  birthday     DateTime?
+  email        String     @unique
+  password     String
   image        String?    @default("https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200&d=mm&r=g")
   subscription Boolean?   @default(false)
   sub_end      DateTime?
@@ -37,7 +36,7 @@ model MyBooks {
 
 model Category {
   id        String   @id @default(uuid())
-  name      String?
+  name      String
   updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
   book      Book?    @relation(fields: [bookId], references: [id])
@@ -48,13 +47,16 @@ model Category {
 
 model Book {
   id          String     @id @default(uuid())
-  title       String?
-  author      String?
-  description String?
-  image       String?
-  audio_link  String?
-  book_link   String?
-  page        Int?
+  title       String
+  author      String
+  description String
+  image       String
+  audio_link  String
+  book_link   String
+  pdf_size    String
+  audio_size  String
+  duration    String
+  page        Int
   downloads   Int?       @default(0)
   category    Category[]
   star        Int?       @default(0)

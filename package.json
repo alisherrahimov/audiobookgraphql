@@ -7,7 +7,7 @@
     "dev": "nodemon src/index.ts --debug",
     "start": "node dist/index.js",
     "build": "tsc -p",
-    "gqltype": "graphql-codegen --config codegen.yml"
+    "gql": "graphql-codegen --config codegen.yml"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.1.0",
@@ -28,6 +28,7 @@
     "@graphql-tools/load": "^7.5.9",
     "@graphql-tools/schema": "^8.3.8",
     "@prisma/client": "^3.14.0",
+    "@rocka/mp3-duration": "^2.0.0",
     "apollo-server": "^3.6.7",
     "apollo-server-core": "^3.9.0",
     "apollo-server-express": "^3.9.0",
@@ -37,6 +38,7 @@
     "graphql": "^16.3.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.0",
+    "mp3-duration": "^1.1.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.5",
     "nodemon": "^2.0.15"

@@ -5,11 +5,6 @@ schema {
   mutation: Mutation
 }
 
-type File {
-  encoding: String!
-  filename: String!
-  mimetype: String!
-}
 input forgetPassword {
   email: String
 }
@@ -35,15 +30,10 @@ type Mutation {
   interest(input: interestCategory): Boolean
   login(input: LoginInput!): ResponseType!
   myBooks(input: book_id): [book]
-  register(
-    email: String
-    date: String
-    password: String
-    username: String
-  ): ResponseType
-  searchBook(author: String, title: String): [book]
+  register(email: String, password: String, username: String): ResponseType
+  searchBook(text: String): [book]
   resetPassword(email: String, password: String): ResponseType
-  checkCode(email: String, code: Int): Boolean
+  checkCode(email: String, code: Int): ResponseType
   forgetPassword(email: String): ResponseType
   getBookByCategory(input: getByCategory): [book]
 }
@@ -69,6 +59,9 @@ type book {
   createdAt: Date
   description: String
   downloads: Int
+  pdf_size: String
+  audio_size: String
+  duration: String
   id: ID
   image: String
   page: Int
@@ -103,7 +96,6 @@ type review {
 
 type user {
   active: Boolean
-  birthday: Date
   code: Int
   createdAt: Date
   email: String
@@ -137,7 +129,7 @@ input resetPassword {
 }
 
 input book_id {
-  id: [String]
+  id: String
 }
 
 input interestCategory {
@@ -150,14 +142,12 @@ input login {
 }
 
 input register {
-  date: Date
   email: String
   password: String
   username: String
 }
 
 input userInput {
-  birthday: Date
   email: String
   password: String
   username: String
