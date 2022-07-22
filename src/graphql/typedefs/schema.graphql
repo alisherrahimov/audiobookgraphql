@@ -25,9 +25,14 @@ input LoginInput {
 type Mutation {
   active(email: String, code: Int): Boolean
   createCategory(name: String!): category
-  createReview(bookId: ID!, content: String!, userID: String!): review
+  createReview(
+    bookId: ID!
+    content: String!
+    userId: String!
+    rating: Float!
+  ): review
   createUser(input: userInput!): user
-  interest(input: interestCategory): Boolean
+  interest(id: [String], userid: String): Boolean
   login(input: LoginInput!): ResponseType!
   myBooks(input: book_id): [book]
   register(email: String, password: String, username: String): ResponseType
@@ -35,7 +40,7 @@ type Mutation {
   resetPassword(email: String, password: String): ResponseType
   checkCode(email: String, code: Int): ResponseType
   forgetPassword(email: String): ResponseType
-  getBookByCategory(input: getByCategory): [book]
+  getBookByCategory(id: String): [book]
 }
 
 type Query {
@@ -61,7 +66,7 @@ type book {
   downloads: Int
   pdf_size: String
   audio_size: String
-  duration: String
+  duration: Float
   id: ID
   image: String
   page: Int
@@ -92,6 +97,7 @@ type review {
   id: ID
   updatedAt: Date!
   user: user
+  rating: Float
 }
 
 type user {

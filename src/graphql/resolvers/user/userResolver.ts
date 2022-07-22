@@ -25,9 +25,10 @@ const getAllUsers = async (): Promise<User[]> => {
     return e;
   }
 };
-const deleteUser = async (id: string): Promise<User> => {
+const deleteUser = async (id: string): Promise<User | null> => {
   try {
-    return await client.user.delete({ where: { id: id } });
+    return await client.user.findFirst({ where: { id: id } });
+    // return await client.user.delete({ where: { id: id } });
   } catch (e) {
     return e;
   }
@@ -49,21 +50,24 @@ const createUser = async (user: UserInput): Promise<User> => {
   }
 };
 const interestCategory = async (
-  uid: MutationInterestArgs
+  uid: string[],
+  userid: string
 ): Promise<boolean> => {
-  const { id } = uid.input;
-
+  console.log(uid);
   try {
-    id.forEach((item) => {
-      client.user.update({
-        data: {
-          interest: { set: { id: item } },
+    await client.user.update({
+      data: {
+        interest: {
+          connect: uid.map((val, index) => {
+            return { id: val };
+          }),
         },
-        where: {
-          email: "1",
-        },
-      });
+      },
+      where: {
+        id: userid,
+      },
     });
+    return true;
   } catch (error) {
     return error;
   }

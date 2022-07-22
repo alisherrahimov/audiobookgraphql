@@ -121,9 +121,9 @@ const resolvers = {
     //User interesting route
     interest: async (
       _: any,
-      args: { input: MutationInterestArgs }
+      args: { id: string[]; userid: string }
     ): Promise<boolean> => {
-      return await interestCategory(args.input);
+      return await interestCategory(args.id, args.userid);
     },
     //User book save
     myBooks: async (_: any, args: { input: Book_Id }): Promise<boolean> => {
@@ -132,9 +132,9 @@ const resolvers = {
     //create review route
     createReview: async (
       _: any,
-      args: { input: MutationCreateReviewArgs }
-    ): Promise<boolean> => {
-      return await createReview(args.input);
+      args: { userId: string; bookId: string; content: string; rating: number }
+    ): Promise<Review> => {
+      return await createReview(args);
     },
     //create category route
     createCategory: async (
@@ -170,9 +170,9 @@ const resolvers = {
     },
     getBookByCategory: async (
       _: any,
-      args: { input: string }
+      args: { id: string }
     ): Promise<Book[] | null> => {
-      return await getBookByCategory(args.input);
+      return await getBookByCategory(args.id);
     },
   },
 };

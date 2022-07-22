@@ -58,7 +58,8 @@ export type MutationCreateCategoryArgs = {
 export type MutationCreateReviewArgs = {
   bookId: Scalars['ID'];
   content: Scalars['String'];
-  userID: Scalars['String'];
+  rating: Scalars['Float'];
+  userId: Scalars['String'];
 };
 
 
@@ -73,7 +74,7 @@ export type MutationForgetPasswordArgs = {
 
 
 export type MutationGetBookByCategoryArgs = {
-  input?: InputMaybe<GetByCategory>;
+  id?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -169,7 +170,7 @@ export type Book = {
   createdAt?: Maybe<Scalars['Date']>;
   description?: Maybe<Scalars['String']>;
   downloads?: Maybe<Scalars['Int']>;
-  duration?: Maybe<Scalars['String']>;
+  duration?: Maybe<Scalars['Float']>;
   id?: Maybe<Scalars['ID']>;
   image?: Maybe<Scalars['String']>;
   page?: Maybe<Scalars['Int']>;
@@ -239,6 +240,7 @@ export type Review = {
   content?: Maybe<Scalars['String']>;
   createdAt: Scalars['Date'];
   id?: Maybe<Scalars['ID']>;
+  rating?: Maybe<Scalars['Float']>;
   updatedAt: Scalars['Date'];
   user?: Maybe<User>;
 };
@@ -338,6 +340,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Date: ResolverTypeWrapper<Scalars['Date']>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   LoginInput: LoginInput;
@@ -366,6 +369,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Date: Scalars['Date'];
+  Float: Scalars['Float'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   LoginInput: LoginInput;
@@ -398,7 +402,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, Partial<MutationActiveArgs>>;
   checkCode?: Resolver<Maybe<ResolversTypes['ResponseType']>, ParentType, ContextType, Partial<MutationCheckCodeArgs>>;
   createCategory?: Resolver<Maybe<ResolversTypes['category']>, ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
-  createReview?: Resolver<Maybe<ResolversTypes['review']>, ParentType, ContextType, RequireFields<MutationCreateReviewArgs, 'bookId' | 'content' | 'userID'>>;
+  createReview?: Resolver<Maybe<ResolversTypes['review']>, ParentType, ContextType, RequireFields<MutationCreateReviewArgs, 'bookId' | 'content' | 'rating' | 'userId'>>;
   createUser?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   forgetPassword?: Resolver<Maybe<ResolversTypes['ResponseType']>, ParentType, ContextType, Partial<MutationForgetPasswordArgs>>;
   getBookByCategory?: Resolver<Maybe<Array<Maybe<ResolversTypes['book']>>>, ParentType, ContextType, Partial<MutationGetBookByCategoryArgs>>;
@@ -438,7 +442,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   downloads?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  duration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  duration?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   page?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -471,6 +475,7 @@ export type ReviewResolvers<ContextType = any, ParentType extends ResolversParen
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  rating?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['user']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

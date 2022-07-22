@@ -27,6 +27,6 @@ export const sendEmail = async (email: string): Promise<boolean> => {
 
     return true;
   } catch (error) {
-    return error;
+    return false;
   }
 };

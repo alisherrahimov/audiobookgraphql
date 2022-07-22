@@ -21,19 +21,19 @@ export const Login = async ({
     if (!person) {
       return {
         error: true,
-        message: "User not found",
+        message: "Bunday foydalanuvchi ro'yxatdan o'tmagan!",
       };
     }
     if (!person?.active) {
       return {
         error: true,
-        message: "User not active",
+        message: "Sizning hisobingiz aktivatsiyaga qilinmagan!",
       };
     }
     const deCode = bcrypt.compareSync(password, person?.password);
     if (deCode) {
       const token = jwt.sign(person, process.env.token_key, {
-        expiresIn: "10d",
+        expiresIn: "356d",
       });
       return {
         error: false,
@@ -42,7 +42,7 @@ export const Login = async ({
     } else {
       return {
         error: true,
-        message: "Password incorrect",
+        message: "Email yoki parol noto'g'ri!",
       };
     }
   } catch (error) {
@@ -67,7 +67,7 @@ export const Register = async ({
     if (findUser?.active) {
       return {
         error: true,
-        message: "User already exist",
+        message: "Bu Foydalanuvchi oldin ro'yxatdan o'tgan.!",
       };
     }
     const hash = bcrypt.hashSync(password, 10);
@@ -89,12 +89,12 @@ export const Register = async ({
     if (await sendEmail(email)) {
       return {
         error: false,
-        message: "User created and sms sent",
+        message: "Foydalanuvchi yaratildi va emailga xabar yuborildi!",
       };
     } else {
       return {
         error: true,
-        message: "User created but sms not sent",
+        message: "Email xabar yuborishda xatolik sodir bo'ldi!",
       };
     }
   } catch (error) {

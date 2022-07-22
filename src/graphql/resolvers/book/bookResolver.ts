@@ -4,13 +4,17 @@ import {
   Home,
   Category,
   MutationCreateReviewArgs,
+  Review,
 } from "generated/graphql";
 const client = new PrismaClient();
 const getBook = async (id: string): Promise<Book> => {
   try {
     const book = await client.book.findFirst({
       where: { id: id },
-      include: { category: true },
+      include: {
+        category: true,
+        review: { include: { user: true, book: true } },
+      },
     });
     return book;
   } catch (e) {
@@ -19,7 +23,12 @@ const getBook = async (id: string): Promise<Book> => {
 };
 const getAllBooks = async (): Promise<Book[] | null> => {
   try {
-    const books = await client.book.findMany({ include: { category: true } });
+    const books = await client.book.findMany({
+      include: {
+        category: true,
+        review: { include: { user: true, book: true } },
+      },
+    });
     return books;
   } catch (e) {
     return e;
@@ -77,18 +86,27 @@ const search = async (text: string): Promise<Book[] | null> => {
     return error;
   }
 };
-const createReview = async (
-  review: MutationCreateReviewArgs
-): Promise<boolean> => {
+const createReview = async ({
+  bookId,
+  content,
+  userId,
+  rating,
+}: {
+  bookId: string;
+  content: string;
+  userId: string;
+  rating: number;
+}): Promise<Review> => {
   try {
-    await client.review.create({
+    const review = await client.review.create({
       data: {
-        bookId: review.bookId,
-        content: review.content,
-        userId: review.userID,
+        content: content,
+        userId: userId,
+        bookId: bookId,
+        rating: rating,
       },
     });
-    return true;
+    return review;
   } catch (error) {
     return error;
   }

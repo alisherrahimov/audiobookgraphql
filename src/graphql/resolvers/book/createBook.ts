@@ -17,7 +17,6 @@ export const createBook = async (
     const duration = await mp3Duration(files.audio[0].path);
     const audio_size = niceBytes(String(files.audio[0].size));
     const pdf_size = niceBytes(String(files.pdf[0].size));
-    let a = new Date(duration * 1000).toISOString().substr(11, 8);
 
     const newBook = await client.book.create({
       data: {
@@ -30,7 +29,7 @@ export const createBook = async (
         description: book.description,
         audio_size: audio_size,
         pdf_size: pdf_size,
-        duration: a,
+        duration: duration,
       },
     });
     res.json(newBook);
